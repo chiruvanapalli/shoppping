@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import api from "./axiosClient"; // ✅ call directly from axios client, not just login
+import api from "../axiosClient"; // ✅ call directly from axios client, not just login
 
 type HttpMethod = "get" | "post" | "put" | "delete";
 

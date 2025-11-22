@@ -1,9 +1,12 @@
 import React from "react";
-import useDynamicBreadcrumb from "../shared/useDynamicBreadcrumb";
-import BreadCrumb from "../shared/BreadCrumb";
+import { useSelector } from "react-redux";
+import BreadCrumb from "./common/BreadCrumb";
 
 const About = () => {
   const crumbs = useDynamicBreadcrumb();
+  const list = useSelector((state: any) => state.products.list);
+  console.log("redux", list);
+
   return (
     <div>
       <BreadCrumb items={crumbs} />
@@ -13,3 +16,6 @@ const About = () => {
 };
 
 export default About;
+function useDynamicBreadcrumb() {
+  throw new Error("Function not implemented.");
+}

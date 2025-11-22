@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Slider from "./Slider";
-import { useApi } from "../api/useApi";
-import { endPoints } from "../api/api-end-points";
+import { useApi } from "../api/common-hook/useApi";
+import { endPoints } from "../api/common-hook/api-end-points";
 
 const Home = () => {
   const { data, request } = useApi();
