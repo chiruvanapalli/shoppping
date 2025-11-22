@@ -1,7 +1,7 @@
 import React from "react";
 import { FiShoppingCart, FiUser } from "react-icons/fi";
-import LOGO from "../assets/images/png/brand-logo.png";
-import DeliverySearchBar from "./DeliverySearchBar";
+import LOGO from "../../assets/images/png/brand-logo.png";
+import DeliverySearchBar from "../DeliverySearchBar";
 
 const Header = () => {
   return (

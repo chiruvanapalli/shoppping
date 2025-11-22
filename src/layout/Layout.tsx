@@ -1,13 +1,11 @@
 import React from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import { Outlet } from "react-router-dom";
-import ToastComp from "../shared/ToastComp";
+import Header from "../components/common/Header";
+import Footer from "../components/common/Footer";
 
 const Layout = () => {
   return (
     <section className="app_wrapper">
-      <ToastComp />
       <Header />
       <main className="main">
         <Outlet />

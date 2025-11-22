@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { slides } from "../json/sliderData";
+import { slides } from "../dummy-data/sliderData";
 import Banner from "../assets/images/png/hero-img.png";
 
 export default function FoodDiscountBanner() {
