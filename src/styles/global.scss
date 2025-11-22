@@ -1,0 +1,27 @@
+html,
+body,
+#root {
+  height: 100%;
+}
+
+.app_wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .header {
+    height: 80px;
+    width: 100%;
+    background-color: bisque;
+  }
+
+  .footer {
+    height: 50px;
+    width: 100%;
+    background-color: aquamarine;
+  }
+
+  .main {
+    flex: 1;
+  }
+}
