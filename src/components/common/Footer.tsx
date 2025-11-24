@@ -1,4 +1,5 @@
 import React from "react";
+import LOGO from "../../assets/images/png/brand-logo.png";
 
 const Footer = () => {
   return (
@@ -6,7 +7,15 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
         {/* Logo */}
         <div>
-          <h2 className="text-2xl font-bold mb-3">MyLogo</h2>
+          <div
+            className="text-center flex items-center"
+            style={{ height: "70px" }}
+          >
+            <img src={LOGO} className="max-h-full" />{" "}
+            <div className="font-extrabold text-4xl bg-gradient-to-r from-[#FFA726] to-[#EF5350] bg-clip-text text-transparent">
+              SPICY
+            </div>
+          </div>
           <p className="text-gray-400 text-sm leading-6">
             Building modern web experiences with clean UI and great UX.
           </p>
