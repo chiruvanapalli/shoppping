@@ -9,8 +9,14 @@ const Header = () => {
       {/* light cream-orange background */}
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* LOGO */}
-        <div className="text-center flex gap-2" style={{ height: "70px" }}>
-          <img src={LOGO} className="max-h-full" />
+        <div
+          className="text-center flex items-center"
+          style={{ height: "70px" }}
+        >
+          <img src={LOGO} className="max-h-full" />{" "}
+          <div className="font-extrabold text-4xl bg-gradient-to-r from-[#FFA726] to-[#EF5350] bg-clip-text text-transparent">
+            SPICY
+          </div>
         </div>
 
         <DeliverySearchBar />
