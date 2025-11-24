@@ -87,7 +87,7 @@ const Home = () => {
           allowMultiple={true}
           items={[
             {
-              title: "Account Settings",
+              title: "Account",
               content: (
                 <p>
                   Change your email, username, password and profile options.
