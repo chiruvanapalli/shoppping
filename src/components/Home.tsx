@@ -1,10 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useApi } from "../api/common-hook/useApi";
 import { endPoints } from "../api/common-hook/api-end-points";
-import Banner from "../assets/images/png/hero-img.png";
 
 import { FiMenu, FiThermometer, FiUserCheck, FiCoffee } from "react-icons/fi";
 import HomeSlider from "./Slider";
+import Button from "./common/Button";
+import Modal from "./common/Modal";
+import Tabs from "./common/Tabs";
+import Dropdown from "./common/Dropdown";
+import Accordion from "./common/Accordion";
 
 const featureIcons: any = {
   "Menu variations": FiMenu,
@@ -15,6 +19,15 @@ const featureIcons: any = {
 
 const Home = () => {
   const { data, request } = useApi();
+  const [visible, setVisible] = useState<boolean>(false);
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
+
+  const categories = [
+    { name: "Vegetarian", value: "veg" },
+    { name: "Non-Veg", value: "non-veg" },
+    { name: "Vegan", value: "vegan" },
+    { name: "Gluten Free", value: "gluten-free" },
+  ];
 
   useEffect(() => {
     request("get", endPoints.popularProducts, null, null);
@@ -31,6 +44,87 @@ const Home = () => {
   return (
     <div className="flex flex-col space-y-5">
       <HomeSlider />
+      <div>
+        {" "}
+        <Button
+          label="Primary"
+          variant="primary"
+          onClick={() => setVisible(true)}
+        />
+        <Button label="Primary" variant="outline" />
+        <Button label="Primary" variant="tertiary" />
+        <Modal
+          size="lg"
+          visible={visible}
+          onHide={() => setVisible(false)}
+          header="Edit Profile"
+          headerTemplate={<div>Hello</div>}
+          footer={
+            <>
+              <Button
+                label="Cancel"
+                variant="tertiary"
+                onClick={() => setVisible(false)}
+              />
+              <Button label="Save" variant="primary" />
+            </>
+          }
+        >
+          <p className="text-gray-700">
+            Here is your modal content like forms or messages.
+          </p>
+        </Modal>
+        <Dropdown
+          placeholder="Select Category"
+          items={categories}
+          onSelect={(value) => {
+            setSelectedCategory(value);
+            console.log("Selected:", value);
+          }}
+          className="w-64"
+        />
+        <Accordion
+          allowMultiple={true}
+          items={[
+            {
+              title: "Account Settings",
+              content: (
+                <p>
+                  Change your email, username, password and profile options.
+                </p>
+              ),
+            },
+            {
+              title: "Notifications",
+              content: <p>Manage your notification preferences.</p>,
+            },
+            {
+              title: "Privacy",
+              content: <p>Control what information is shared.</p>,
+            },
+          ]}
+        />
+        <Tabs
+          defaultValue="general"
+          tabs={[
+            {
+              label: "General",
+              value: "general",
+              content: <p className="text-gray-700">General settings here.</p>,
+            },
+            {
+              label: "Profile",
+              value: "profile",
+              content: <p className="text-gray-700">Profile form goes here.</p>,
+            },
+            {
+              label: "Security",
+              value: "security",
+              content: <p className="text-gray-700">Security options here.</p>,
+            },
+          ]}
+        />
+      </div>
 
       <div className="w-full bg-white py-16 px-6">
         {/* Section Title */}

@@ -3,26 +3,34 @@ import { IoIosArrowDown } from "react-icons/io";
 
 interface DropdownProps {
   placeholder?: string;
-  label?: string; // Button text
-  items: any[]; // List of items
-  onSelect: (value: string) => void; // When item is selected
-  className?: string; // Style overrides (optional)
+  items: any[];
+  onSelect: (value: any) => void;
+  className?: string;
   noBorder?: boolean;
+  panelWidth?: "trigger" | "auto" | number | string; // NEW
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
-  label,
   items,
   onSelect,
   className = "",
-  placeholder,
+  placeholder = "Select",
   noBorder,
+  panelWidth = "trigger", // Default → width same as dropdown
 }) => {
   const [open, setOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const [value, setValue] = useState<any>();
+  const [value, setValue] = useState<any>(null);
 
-  // Close when clicking outside
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  const [position, setPosition] = useState<"bottom" | "top">("bottom");
+  const [align, setAlign] = useState<"left" | "right">("left");
+
+  const [panelRealWidth, setPanelRealWidth] = useState<string | undefined>();
+
+  // close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (
@@ -36,20 +44,58 @@ const Dropdown: React.FC<DropdownProps> = ({
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  console.log("value", value);
+  // smart positioning + width calculation
+  useEffect(() => {
+    if (!open) return;
+
+    const trigger = dropdownRef.current?.getBoundingClientRect();
+    const menu = menuRef.current?.getBoundingClientRect();
+    if (!trigger || !menu) return;
+
+    // vertical logic
+    const spaceBelow = window.innerHeight - trigger.bottom;
+    const spaceAbove = trigger.top;
+
+    if (spaceBelow < menu.height && spaceAbove > menu.height) {
+      setPosition("top");
+    } else {
+      setPosition("bottom");
+    }
+
+    // horizontal logic
+    const spaceRight = window.innerWidth - trigger.left;
+    if (spaceRight < menu.width) {
+      setAlign("right");
+    } else {
+      setAlign("left");
+    }
+
+    // set panel width
+    if (panelWidth === "trigger") {
+      setPanelRealWidth(`${trigger.width}px`);
+    } else if (typeof panelWidth === "number") {
+      setPanelRealWidth(`${panelWidth}px`);
+    } else if (typeof panelWidth === "string") {
+      setPanelRealWidth(panelWidth);
+    } else {
+      setPanelRealWidth(undefined); // auto
+    }
+  }, [open, panelWidth]);
 
   return (
     <div ref={dropdownRef} className={`relative ${className}`}>
-      {/* Label Button */}
+      {/* Trigger */}
       <button
-        onClick={() => setOpen(!open)}
-        className={`flex items-center gap-2 px-3 py-2 bg-white hover:bg-gray-50 ${
+        ref={triggerRef}
+        onClick={() => setOpen((prev) => !prev)}
+        className={`flex items-center justify-between gap-2 px-3 py-2 bg-white hover:bg-gray-50 w-full ${
           noBorder ? "" : "border border-gray-200 rounded-md"
         }`}
       >
-        {value?.name || placeholder}
+        <span>{value?.name || placeholder}</span>
+
         <span
-          className={`text-sm transition-transform duration-300 ${
+          className={`transition-transform duration-300 ${
             open ? "rotate-180" : "rotate-0"
           }`}
         >
@@ -57,20 +103,31 @@ const Dropdown: React.FC<DropdownProps> = ({
         </span>
       </button>
 
-      {/* Dropdown menu */}
+      {/* Dropdown Menu */}
       {open && (
-        <div className="absolute left-0 top-full mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-50 overflow-hidden">
-          {items.map((item) => (
+        <div
+          ref={menuRef}
+          style={{ width: panelRealWidth }}
+          className={`
+            absolute bg-white border border-gray-200 rounded-md shadow-lg z-50 overflow-hidden
+
+            ${position === "bottom" ? "top-full mt-2 animate-slide-down" : ""}
+            ${position === "top" ? "bottom-full mb-2 animate-slide-up" : ""}
+
+            ${align === "left" ? "left-0" : "right-0"}
+          `}
+        >
+          {items.map((item, idx) => (
             <button
-              key={item}
+              key={idx}
               onClick={() => {
-                onSelect?.(item);
                 setValue(item);
+                onSelect(item);
                 setOpen(false);
               }}
               className="w-full text-left px-4 py-2 hover:bg-gray-100"
             >
-              {item?.name}
+              {item.name}
             </button>
           ))}
         </div>
