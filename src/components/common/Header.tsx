@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token, setToken] = useState<any>(localStorage.getItem("token"));
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<any>(null);
 
@@ -78,10 +78,12 @@ const Header = () => {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setOpen(!open)}
-                className="flex items-center gap-2 border border-gray-500 px-4 py-2 rounded-full bg-white text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:border-gray-600 hover:text-gray-800"
+                className="flex items-center gap-2 border border-gray-500 px-4 py-2 rounded-md bg-white text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:border-gray-600 hover:text-gray-800"
               >
                 <FiUser className="text-gray-700 group-hover:text-white" />
-                <span className="text-sm font-medium">Profile</span>
+                <span className="text-sm font-medium">
+                  {token && token?.user?.name}
+                </span>
                 <FiChevronDown
                   className={`transition-transform ${
                     open ? "rotate-180" : "rotate-0"
@@ -91,19 +93,19 @@ const Header = () => {
 
               {/* DROPDOWN MENU */}
               {open && (
-                <div className="absolute right-0 mt-1 w-40 bg-white shadow-lg rounded-lg border border-gray-200 animate-fadeIn">
+                <div className="absolute right-0 mt-[2px] w-40 bg-white shadow-lg rounded-lg border border-gray-200 animate-fadeIn">
                   <button
                     onClick={() => navigate("/profile")}
                     className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2"
                   >
-                    <FiUser /> My Profile
+                    My Profile
                   </button>
 
                   <button
                     onClick={handleLogout}
                     className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2 text-red-500"
                   >
-                    <FiLogOut /> Logout
+                    Logout
                   </button>
                 </div>
               )}
