@@ -2,8 +2,10 @@ import React from "react";
 import { FiShoppingCart, FiUser } from "react-icons/fi";
 import LOGO from "../../assets/images/png/brand-logo.png";
 import DeliverySearchBar from "../DeliverySearchBar";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
   return (
     <header className="w-full bg-white py-4 px-6 shadow-xs sticky top-0 z-30">
       {/* light cream-orange background */}
@@ -63,6 +65,7 @@ const Header = () => {
 
           {/* LOGIN BUTTON (ALWAYS WHITE ICON + TEXT) */}
           <button
+            onClick={() => navigate("/login")}
             className="
             cursor-pointer
     group

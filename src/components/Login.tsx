@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchUserDetails } from "../store/slices/authSlice";
-import type { AppDispatch, RootState } from "../store";
+// import { fetchUserDetails } from "../store/slices/authSlice";
+// import type { AppDispatch, RootState } from "../store";
+import { commonService } from "../api/commonService";
 
 const Login = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
   const [userDetails, setUserDetails] = useState<any>({
     email: "",
     password: "",
@@ -20,9 +20,8 @@ const Login = () => {
     password: false,
   });
   const [pswStrength, setPswStrength] = useState<any>("");
-  const { data, error } = useSelector(
-    (state: RootState) => state.userLoginDetails
-  );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<any>(null);
 
   const checkPasswordStrength = (password: string) => {
     const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/; // strong
@@ -77,14 +76,14 @@ const Login = () => {
     validate(name, value);
   };
 
-  console.log(
-    "user details",
-    userDetails,
-    "errors",
-    errors,
-    "touched",
-    touched
-  );
+  // console.log(
+  //   "user details",
+  //   userDetails,
+  //   "errors",
+  //   errors,
+  //   "touched",
+  //   touched
+  // );
 
   const isFormValid: boolean =
     !errors.email &&
@@ -92,7 +91,7 @@ const Login = () => {
     userDetails.email &&
     userDetails.password;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setTouched({ email: true, password: true });
 
@@ -100,23 +99,25 @@ const Login = () => {
     validate("password", userDetails.password);
     if (isFormValid) {
       console.log("Submitted successfully");
-      dispatch(fetchUserDetails(userDetails));
+      setIsLoading(true);
+      try {
+        const response: any = await commonService.login(userDetails);
+        if (response.status === 200) {
+          localStorage.setItem("token", JSON.stringify(response.data));
+          navigate("/", { replace: true });
+        }
+      } catch (err) {
+        setError(err);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
   useEffect(() => {
-    const tokenData: any = localStorage.getItem("token");
-    if (tokenData?.token) {
-      navigate("/", { replace: true });
-    }
+    const token = localStorage.getItem("token");
+    if (token) navigate("/", { replace: true });
   }, [navigate]);
-
-  useEffect(() => {
-    if (data?.token) {
-      localStorage.setItem("token", JSON.stringify(data));
-      navigate("/", { replace: true });
-    }
-  }, [data, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -124,6 +125,7 @@ const Login = () => {
         <h2 className="text-3xl font-semibold text-gray-800 text-center">
           Login
         </h2>
+        {isLoading && <div className="text-center">Redirecting...</div>}
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div>
             <label

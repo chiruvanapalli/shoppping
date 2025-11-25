@@ -18,7 +18,7 @@ const featureIcons: any = {
 };
 
 const Home = () => {
-  const { data, request } = useApi();
+  // const { data, request } = useApi();
   const [visible, setVisible] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
 
@@ -29,11 +29,11 @@ const Home = () => {
     { name: "Gluten Free", value: "gluten-free" },
   ];
 
-  useEffect(() => {
-    request("get", endPoints.popularProducts, null, null);
-  }, [request]);
+  // useEffect(() => {
+  //   request("get", endPoints.popularProducts, null, null);
+  // }, [request]);
 
-  console.log(data);
+  // console.log(data);
   const features = [
     { title: "Menu variations" },
     { title: "Cooking warm" },
@@ -58,7 +58,6 @@ const Home = () => {
           visible={visible}
           onHide={() => setVisible(false)}
           header="Edit Profile"
-          headerTemplate={<div>Hello</div>}
           footer={
             <>
               <Button
