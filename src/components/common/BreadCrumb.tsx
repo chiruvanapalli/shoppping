@@ -7,7 +7,7 @@ interface BreadCrumbProps {
 
 const BreadCrumb: React.FC<BreadCrumbProps> = ({ items }) => {
   return (
-    <ul className="flex items-center gap-2 text-gray-600 text-sm">
+    <ul className="flex items-center gap-2 text-gray-600 text-sm p-3 py-2 bg-gray-50 border-b-[1px] border-gray-100">
       {items.map((crumb, index) => {
         return (
           <>

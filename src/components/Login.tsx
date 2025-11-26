@@ -139,7 +139,7 @@ const Login = () => {
               name="email"
               placeholder="Enter your email"
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg 
-              focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+              focus:ring-2 focus:ring-blue-500 focus:border-blue-50 outline-none transition"
               onChange={(e) => handleChange(e, "email")}
               onBlur={handleBlur}
             />

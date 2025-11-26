@@ -51,7 +51,7 @@ const Header = () => {
         {/* RIGHT */}
         <div className="flex items-center gap-4">
           {/* Cart Button */}
-          <button className="cursor-pointer group relative w-10 h-10 flex items-center justify-center rounded-full border border-gray-500 bg-white transition-all duration-200 hover:bg-orange-600 hover:border-orange-600">
+          {/* <button className="cursor-pointer group relative w-10 h-10 flex items-center justify-center rounded-full border border-gray-500 bg-white transition-all duration-200 hover:bg-orange-600 hover:border-orange-600">
             <FiShoppingCart
               className="text-gray-700 transition-all duration-200 group-hover:text-white"
               size={20}
@@ -59,8 +59,8 @@ const Header = () => {
             <span className="absolute -top-1 -right-1 bg-orange-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold border-white border-2">
               02
             </span>
-          </button>
-
+          </button> */}
+          2 items | ₹498
           {/* 🔥 CONDITIONAL: LOGIN vs PROFILE */}
           {!token ? (
             // LOGIN BUTTON

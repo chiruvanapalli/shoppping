@@ -44,7 +44,7 @@ const Home = () => {
   return (
     <div className="flex flex-col space-y-5">
       <HomeSlider />
-      <div>
+      {/* <div>
         {" "}
         <Button
           label="Primary"
@@ -123,7 +123,7 @@ const Home = () => {
             },
           ]}
         />
-      </div>
+      </div> */}
 
       <div className="w-full bg-white py-16 px-6">
         {/* Section Title */}
