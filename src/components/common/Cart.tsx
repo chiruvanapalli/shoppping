@@ -1,65 +1,85 @@
 import React from "react";
 
 const Cart = () => {
+  const cartItems = [
+    { name: "Chicken Biryani", price: 259, qty: 1 },
+    { name: "Paneer Tikka", price: 199, qty: 1 },
+    { name: "Lassi", price: 50, qty: 2 },
+    { name: "Gulab Jamun", price: 99, qty: 1 },
+    { name: "Naan", price: 30, qty: 3 },
+    { name: "Butter Chicken", price: 299, qty: 1 },
+  ];
+
   return (
-    <div
-      id="cartModal"
-      className="fixed inset-0 bg-black/40 backdrop-blur-sm hidden items-end justify-center z-50"
-    >
-      <div className="bg-white w-full max-w-lg rounded-t-2xl p-6 animate-slide-up">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">Your Cart</h2>
-          <button className="text-gray-500 hover:text-gray-700 text-2xl">
-            &times;
+    <div className="max-w-6xl mx-auto p-6 min-h-screen">
+      <h1 className="text-3xl font-normal mb-6 flex items-center gap-3">
+        Your Cart{" "}
+        <span className="p-2 py-1 bg-gray-100 rounded-md text-sm">4</span>
+      </h1>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* LEFT SIDE — CART ITEMS */}
+        <div className="max-h-full lg:col-span-2">
+          <div className="w-full bg-white shadow rounded-xl p-6 pr-2">
+            {/* <h2 className="text-xl font-semibold mb-4">Items</h2> */}
+
+            <div className="space-y-6 overflow-y-auto max-h-[320px] pr-4">
+              {cartItems.map((item, index) => (
+                <div
+                  key={index}
+                  className={`flex justify-between ${
+                    cartItems.length - 1 !== index
+                      ? "border-b border-gray-200 pb-4"
+                      : ""
+                  }`}
+                >
+                  {/* Item Info */}
+                  <div>
+                    <p className="font-semibold text-lg">{item.name}</p>
+                    <p className="text-sm text-gray-600">₹{item.price}</p>
+                  </div>
+
+                  {/* Quantity Controls */}
+                  <div className="flex items-center gap-2">
+                    <button className="px-3 py-1 border rounded cursor-pointer hover:bg-gray-100">
+                      -
+                    </button>
+                    <span className="px-3">{item.qty}</span>
+                    <button className="px-3 py-1 border rounded cursor-pointer hover:bg-gray-100">
+                      +
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT SIDE — SUMMARY */}
+        <div className="bg-white shadow rounded-xl p-6 pt-4 h-fit sticky top-24">
+          <h2 className="text-xl font-semibold mb-4">Bill Summary</h2>
+
+          <div className="space-y-3 text-gray-700">
+            <div className="flex justify-between">
+              <span>Subtotal</span>
+              <span>₹458</span>
+            </div>
+
+            <div className="flex justify-between">
+              <span>Delivery Fee</span>
+              <span>₹40</span>
+            </div>
+
+            <div className="flex justify-between font-semibold text-lg pt-3 border-t">
+              <span>Total</span>
+              <span>₹498</span>
+            </div>
+          </div>
+
+          <button className="mt-6 w-full bg-orange-600 text-white py-3 rounded-full font-semibold hover:bg-orange-700 transition cursor-pointer">
+            Proceed to Checkout
           </button>
         </div>
-
-        <div className="space-y-4 max-h-64 overflow-y-auto pr-2">
-          <div className="flex justify-between items-center border-b pb-4">
-            <div>
-              <p className="font-semibold">Chicken Biryani</p>
-              <p className="text-sm text-gray-600">₹259</p>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button className="px-3 py-1 border rounded">-</button>
-              <span className="px-3">1</span>
-              <button className="px-3 py-1 border rounded">+</button>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center border-b pb-4">
-            <div>
-              <p className="font-semibold">Paneer Tikka</p>
-              <p className="text-sm text-gray-600">₹199</p>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button className="px-3 py-1 border rounded">-</button>
-              <span className="px-3">1</span>
-              <button className="px-3 py-1 border rounded">+</button>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-6 border-t pt-4 space-y-2">
-          <div className="flex justify-between text-gray-700">
-            <span>Subtotal</span>
-            <span>₹458</span>
-          </div>
-          <div className="flex justify-between text-gray-700">
-            <span>Delivery Fee</span>
-            <span>₹40</span>
-          </div>
-          <div className="flex justify-between font-semibold text-lg mt-2">
-            <span>Total</span>
-            <span>₹498</span>
-          </div>
-        </div>
-
-        <button className="mt-6 w-full bg-orange-600 text-white py-3 rounded-full font-semibold hover:bg-orange-700 transition">
-          Proceed to Checkout
-        </button>
       </div>
     </div>
   );

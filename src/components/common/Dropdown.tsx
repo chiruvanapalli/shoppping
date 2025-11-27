@@ -88,7 +88,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       <button
         ref={triggerRef}
         onClick={() => setOpen((prev) => !prev)}
-        className={`flex items-center justify-between gap-2 px-3 py-2 bg-white hover:bg-gray-50 w-full ${
+        className={`flex items-center justify-between gap-2 px-3 py-2 cursor-pointer bg-white hover:bg-gray-50 w-full ${
           noBorder ? "" : "border border-gray-200 rounded-md"
         }`}
       >
@@ -109,7 +109,7 @@ const Dropdown: React.FC<DropdownProps> = ({
           ref={menuRef}
           style={{ width: panelRealWidth }}
           className={`
-            absolute bg-white border border-gray-200 rounded-md shadow-lg z-50 overflow-hidden
+            absolute bg-white border border-gray-200 rounded-md shadow-lg z-50 overflow-hidden p-1
 
             ${position === "bottom" ? "top-full mt-2 animate-slide-down" : ""}
             ${position === "top" ? "bottom-full mb-2 animate-slide-up" : ""}
@@ -125,7 +125,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                 onSelect(item);
                 setOpen(false);
               }}
-              className="w-full text-left px-4 py-2 hover:bg-gray-100"
+              className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-sm"
             >
               {item.name}
             </button>

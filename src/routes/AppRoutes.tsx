@@ -7,6 +7,11 @@ import About from "../components/About";
 import { ProtectedRoute } from "./ProtectedRoute";
 import ProductDetails from "../components/ProductDetails";
 import Products from "../components/Products";
+import Cart from "../components/common/Cart";
+import AddressPage from "../components/Address";
+import OrderSuccess from "../components/OrderSuccess";
+import OrdersPage from "../components/MyOrders";
+import ProfilePage from "../components/Profile";
 
 const AppRoutes = () => {
   return (
@@ -19,6 +24,11 @@ const AppRoutes = () => {
           <Route path="/about" element={<About />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:productId" element={<ProductDetails />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/address" element={<AddressPage />} />
+          <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
       </Route>
 
