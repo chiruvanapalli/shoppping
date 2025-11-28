@@ -41,7 +41,7 @@ export default function Tabs({
   return (
     <div className={`w-full ${className}`}>
       {/* Tab Headers */}
-      <div className="relative border-b overflow-x-auto no-scrollbar">
+      <div className="relative border-b border-gray-200 overflow-x-auto no-scrollbar">
         <div className="flex relative">
           {/* Animated underline */}
           <div
@@ -57,7 +57,7 @@ export default function Tabs({
                 tabRefs.current[i] = el;
               }}
               onClick={() => setActiveTab(tab.value)}
-              className={`px-4 py-2 text-sm font-medium whitespace-nowrap
+              className={`px-4 py-2 text-sm font-medium whitespace-nowrap cursor-pointer
                 ${
                   activeTab === tab.value
                     ? "text-orange-600"

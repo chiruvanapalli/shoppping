@@ -8,12 +8,15 @@ import {
 import LOGO from "../../assets/images/png/brand-logo.png";
 import DeliverySearchBar from "../DeliverySearchBar";
 import { useNavigate } from "react-router-dom";
+import { VscListSelection } from "react-icons/vsc";
+import Sidebar from "./Sidebar";
 
 const Header = () => {
   const navigate = useNavigate();
   const [token, setToken] = useState<any>(localStorage.getItem("token"));
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<any>(null);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -40,6 +43,17 @@ const Header = () => {
           className="text-center flex items-center"
           style={{ height: "70px" }}
         >
+          <div
+            onClick={() => setSidebarOpen(true)}
+            className="
+    p-3 rounded-full cursor-pointer 
+    transition-all duration-200
+    hover:bg-gray-100 hover:scale-105
+  "
+          >
+            <VscListSelection size={24} />
+          </div>
+
           <img src={LOGO} className="max-h-full" />
           <div className="font-extrabold text-4xl bg-gradient-to-r from-[#FFA726] to-[#EF5350] bg-clip-text text-transparent">
             SPICY
@@ -113,6 +127,14 @@ const Header = () => {
           )}
         </div>
       </div>
+      <Sidebar
+        visible={isSidebarOpen}
+        position="left"
+        width="400px"
+        onClose={() => setSidebarOpen(false)}
+      >
+        User Details go here
+      </Sidebar>
     </header>
   );
 };

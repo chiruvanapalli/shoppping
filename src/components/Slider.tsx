@@ -24,8 +24,8 @@ export default function HomeSlider() {
     {
       title: (
         <>
-          Taste the <span className="font-semibold">Freshness</span> in <br />
-          Every Bite
+          Taste the <span className="font-semibold">Freshness</span> in Every
+          Bite
         </>
       ),
       subtitle: (
@@ -51,8 +51,8 @@ export default function HomeSlider() {
     {
       title: (
         <>
-          Savor the <span className="font-semibold">Real Taste</span> of <br />
-          Fresh Food
+          Savor the <span className="font-semibold">Real Taste</span> of Fresh
+          Food
         </>
       ),
       subtitle: (
@@ -104,7 +104,7 @@ export default function HomeSlider() {
                       {quotes[i].subtitle}
                     </p>
 
-                    <button className="mt-2 bg-orange-600 text-white px-6 py-3 rounded-full w-fit font-semibold shadow hover:bg-orange-700 transition">
+                    <button className="mt-2 bg-orange-600 text-white px-6 py-3 rounded-full w-fit font-semibold shadow hover:bg-orange-700 transition cursor-pointer">
                       Order Now
                     </button>
                   </div>
@@ -134,7 +134,7 @@ export default function HomeSlider() {
           <button
             key={i}
             onClick={() => setIndex(i)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+            className={`w-5 h-1 rounded-full transition-all duration-300 ${
               index === i ? "bg-orange-600 scale-110" : "bg-gray-300"
             }`}
           />

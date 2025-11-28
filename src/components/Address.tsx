@@ -37,7 +37,7 @@ export default function AddressPage() {
 
   return (
     <div className="max-w-7xl mx-auto p-6 min-h-screen">
-      <h1 className="text-3xl font-bold mb-8">Select Delivery Address</h1>
+      <h1 className="text-3xl font-normal mb-8">Select Delivery Address</h1>
 
       {/* Layout */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

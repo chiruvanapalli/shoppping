@@ -125,6 +125,29 @@ const Home = () => {
         />
       </div> */}
 
+      <div className="m-6">
+        <Tabs
+          defaultValue="general"
+          tabs={[
+            {
+              label: "General",
+              value: "general",
+              content: <p className="text-gray-700">General settings here.</p>,
+            },
+            {
+              label: "Profile",
+              value: "profile",
+              content: <p className="text-gray-700">Profile form goes here.</p>,
+            },
+            {
+              label: "Security",
+              value: "security",
+              content: <p className="text-gray-700">Security options here.</p>,
+            },
+          ]}
+        />
+      </div>
+
       <div className="w-full bg-white py-16 px-6">
         {/* Section Title */}
         <div className="text-center mb-12">

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown, IoIosCheckmark } from "react-icons/io";
 
 interface DropdownProps {
   placeholder?: string;
@@ -20,6 +20,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<any>(null);
+  const [selecedItem, setSelectedItem] = useState<any>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -88,7 +89,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       <button
         ref={triggerRef}
         onClick={() => setOpen((prev) => !prev)}
-        className={`flex items-center justify-between gap-2 px-3 py-2 cursor-pointer bg-white hover:bg-gray-50 w-full ${
+        className={`flex items-center justify-between gap-2 px-3 focus:border-gray-300 focus:outline-2 outline-gray-100 py-2 cursor-pointer bg-white w-full ${
           noBorder ? "" : "border border-gray-200 rounded-md"
         }`}
       >
@@ -107,11 +108,11 @@ const Dropdown: React.FC<DropdownProps> = ({
       {open && (
         <div
           ref={menuRef}
-          style={{ width: panelRealWidth }}
+          style={{ width: dropdownRef.current?.offsetWidth }}
           className={`
             absolute bg-white border border-gray-200 rounded-md shadow-lg z-50 overflow-hidden p-1
 
-            ${position === "bottom" ? "top-full mt-2 animate-slide-down" : ""}
+            ${position === "bottom" ? "top-full animate-slide-down" : ""}
             ${position === "top" ? "bottom-full mb-2 animate-slide-up" : ""}
 
             ${align === "left" ? "left-0" : "right-0"}
@@ -124,10 +125,14 @@ const Dropdown: React.FC<DropdownProps> = ({
                 setValue(item);
                 onSelect(item);
                 setOpen(false);
+                setSelectedItem(idx);
               }}
-              className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-sm"
+              className={`w-full flex justify-between gap-2 text-left text-sm px-4 pr-2 py-2 mb-1 hover:bg-gray-50 cursor-pointer rounded-sm ${
+                selecedItem === idx ? "bg-gray-100" : ""
+              }`}
             >
               {item.name}
+              {selecedItem === idx ? <IoIosCheckmark size={24} /> : null}
             </button>
           ))}
         </div>

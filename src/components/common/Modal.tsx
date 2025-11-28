@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 interface ModalProps {
   visible: boolean;
   onHide: () => void;
-  header?: React.ReactNode;
+  title?: React.ReactNode;
   footer?: React.ReactNode;
   children: React.ReactNode;
   dismissableMask?: boolean;
@@ -17,7 +17,7 @@ export default function Modal({
   visible,
   onHide,
   children,
-  header,
+  title,
   footer,
   dismissableMask = true,
   headerTemplate,
@@ -67,11 +67,11 @@ export default function Modal({
           {headerTemplate ? (
             headerTemplate
           ) : (
-            <div className="flex items-center justify-between p-4 border-b bg-gray-50">
-              <div className="text-lg font-semibold">{header}</div>
+            <div className="flex items-center justify-between p-4 border-b border-gray-300">
+              <div className="text-lg font-semibold">{title}</div>
               <button
                 onClick={onHide}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-500 hover:text-gray-700 hover:bg-gray-200 cursor-pointer p-3 py-2 rounded-sm"
               >
                 ✕
               </button>
@@ -79,11 +79,11 @@ export default function Modal({
           )}
 
           {/* Body */}
-          <div className="p-5 overflow-y-auto">{children}</div>
+          <div className="p-6 overflow-y-auto">{children}</div>
 
           {/* Footer */}
           {footer && (
-            <div className="p-4 border-t bg-gray-50 flex justify-end gap-3">
+            <div className="p-4 border-t border-gray-300 bg-gray-50 flex justify-end gap-3">
               {footer}
             </div>
           )}

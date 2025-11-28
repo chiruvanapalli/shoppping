@@ -1,10 +1,8 @@
-import React, { useState } from "react";
 import BreadCrumb from "./common/BreadCrumb";
 import useDynamicBreadcrumb from "./common/useDynamicBreadcrumb";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaClock, FaStar } from "react-icons/fa";
-import Cart from "./common/Cart";
-import Modal from "./common/Modal";
+import { useNavigate } from "react-router-dom";
 
 const restaurant = {
   name: "Paradise Biryani",
@@ -59,25 +57,29 @@ const items = [
 
 const ProductDetails = () => {
   const crumbs = useDynamicBreadcrumb();
-  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const navigate = useNavigate();
   return (
     <>
       <BreadCrumb items={crumbs} />
-      <div className="pb-24">
-        {/* Banner */}
-        <div className="relative h-68 w-full">
-          <img src={restaurant.banner} className="w-full h-full object-cover" />
-          <div className="absolute inset-0"></div>
+      <div className="pb-28">
+        {/* BEAUTIFUL BANNER */}
+        <div className="relative h-30 w-full overflow-hidden">
+          {/* <img
+            src={restaurant.banner}
+            className="w-full h-full object-cover scale-105 animate-fadeInSlow"
+          /> */}
+          {/* <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div> */}
+          <div className="absolute inset-0 bg-gradient-to-t from-orange-600/80 via-orange-500/60 to-orange-400/70"></div>
         </div>
 
-        {/* Floating Card */}
+        {/* FLOATING CARD */}
         <div className="max-w-5xl mx-auto -mt-24 relative z-10">
-          <div className="bg-white shadow-xl p-6 rounded-2xl">
-            {/* Restaurant Info */}
-            <h1 className="text-3xl font-bold">{restaurant.name}</h1>
+          <div className="bg-white shadow-xl p-8 rounded-2xl animate-slideUp">
+            {/* Restaurant Title */}
+            <h1 className="text-4xl font-semibold">{restaurant.name}</h1>
 
-            {/* Rating + Cost + Time */}
-            <div className="flex items-center gap-4 mt-3 text-gray-700">
+            {/* Rating & Meta */}
+            <div className="flex flex-wrap items-center gap-4 mt-4 text-gray-700">
               <div className="flex items-center gap-2">
                 <FaStar className="text-green-600" />
                 <span className="font-semibold">{restaurant.rating}</span>
@@ -87,25 +89,24 @@ const ProductDetails = () => {
               <span className="text-gray-300">•</span>
 
               <div className="flex items-center gap-2">
-                <FaClock />
+                <FaClock className="text-orange-600" />
                 {restaurant.deliveryTime}
               </div>
 
               <span className="text-gray-300">•</span>
 
-              <span>{restaurant.costForTwo}</span>
+              <span className="font-medium">{restaurant.costForTwo}</span>
             </div>
 
-            {/* Cuisine + Location */}
-            <p className="text-gray-600 mt-1">{restaurant.cuisine}</p>
+            <p className="text-gray-600 mt-3">{restaurant.cuisine}</p>
             <p className="text-gray-500">{restaurant.location}</p>
 
-            {/* Offers */}
-            <div className="flex gap-3 mt-5">
+            {/* Offers row */}
+            <div className="flex flex-wrap gap-3 mt-6">
               {offers.map((offer, idx) => (
                 <div
                   key={idx}
-                  className="border border-orange-400 text-orange-600 px-4 py-2 rounded-lg text-sm font-semibold"
+                  className="border border-orange-400 text-orange-600 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-50 transition cursor-pointer"
                 >
                   {offer.title} • {offer.code}
                 </div>
@@ -114,29 +115,31 @@ const ProductDetails = () => {
           </div>
         </div>
 
-        {/* Menu Layout */}
-        <div className="max-w-5xl mx-auto mt-10 flex gap-10 px-4">
-          {/* LEFT CATEGORY NAV */}
-          <div className="hidden md:block w-64 sticky top-24 h-[500px] overflow-y-auto border-r border-gray-400 pr-4">
-            <h3 className="font-bold mb-4">Menu</h3>
-            <ul className="space-y-3">
+        {/* MENU CONTENT */}
+        <div className="max-w-5xl mx-auto mt-12 flex gap-10 px-4">
+          {/* LEFT SIDEBAR */}
+          <div className="hidden md:block w-64 sticky top-28 h-[500px] overflow-y-auto">
+            <h3 className="font-bold mb-5 text-lg">Menu</h3>
+
+            <ul className="space-y-4">
               {categories.map((cat, idx) => (
                 <li
                   key={idx}
-                  className="cursor-pointer hover:text-orange-600 transition"
+                  className="cursor-pointer text-gray-700 font-medium hover:text-orange-600 transition relative group"
                 >
                   {cat}
+                  <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-orange-600 transition-all duration-300 group-hover:w-full"></span>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* RIGHT MENU ITEMS */}
-          <div className="flex-1 space-y-8">
+          {/* MENU ITEMS RIGHT */}
+          <div className="flex-1 space-y-10">
             {items.map((item, idx) => (
               <div
                 key={idx}
-                className="flex justify-between gap-6 pb-6 border-b border-gray-400"
+                className="flex justify-between gap-6 pb-8 border-b border-gray-200 group transition transform hover:-translate-y-1"
               >
                 {/* Info */}
                 <div className="flex-1">
@@ -146,15 +149,19 @@ const ProductDetails = () => {
                     }`}
                   ></span>
 
-                  <p className="text-lg font-semibold mt-1">{item.name}</p>
+                  <p className="text-xl font-semibold mt-2 group-hover:text-orange-600 transition">
+                    {item.name}
+                  </p>
+
                   <p className="font-medium text-gray-700 mt-1">
                     ₹{item.price}
                   </p>
-                  <p className="text-gray-500 text-sm mt-1 max-w-md">
+
+                  <p className="text-gray-500 text-sm mt-1 max-w-md leading-relaxed">
                     {item.desc}
                   </p>
 
-                  <button className="mt-3 border border-gray-400 rounded-md px-4 py-1 font-semibold text-sm hover:bg-gray-50">
+                  <button className="mt-3 border border-orange-600 text-orange-600 rounded-md px-4 py-1 font-semibold text-sm hover:bg-orange-600 hover:text-white transition">
                     ADD
                   </button>
                 </div>
@@ -162,32 +169,23 @@ const ProductDetails = () => {
                 {/* Image */}
                 <img
                   src={item.img}
-                  className="w-32 h-28 rounded-lg object-cover shadow"
+                  className="w-32 h-28 rounded-xl object-cover shadow-md group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
             ))}
           </div>
         </div>
 
-        {/* Bottom Cart Bar */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg px-6 py-3 flex items-center justify-between">
-          <p className="font-semibold">2 items | ₹498</p>
+        {/* BOTTOM CART BAR */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white shadow-xl px-6 py-4 flex items-center justify-between animate-slideUpFast">
+          <p className="font-semibold text-lg">2 items | ₹498</p>
           <button
-            onClick={() => setIsVisible(true)}
-            className="bg-orange-600 text-white px-5 py-2 rounded-full flex items-center gap-2 cursor-pointer"
+            onClick={() => navigate("/cart")}
+            className="bg-orange-600 text-white px-6 py-2 rounded-full flex items-center gap-2 cursor-pointer hover:bg-orange-700 transition"
           >
             View Cart <IoIosArrowForward />
           </button>
         </div>
-        {isVisible && (
-          <Modal
-            onHide={() => setIsVisible(false)}
-            visible={isVisible}
-            header="Your Cart"
-          >
-            {<Cart />}
-          </Modal>
-        )}
       </div>
     </>
   );
