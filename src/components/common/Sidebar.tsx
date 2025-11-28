@@ -7,6 +7,7 @@ interface SidebarProps {
   position?: "left" | "right"; // default: right
   width?: string; // e.g. "300px"
   children: React.ReactNode;
+  headerTemplate?: React.ReactNode;
 }
 
 export default function Sidebar({
@@ -15,12 +16,14 @@ export default function Sidebar({
   position = "right",
   width = "320px",
   children,
+  headerTemplate,
 }: SidebarProps) {
   if (typeof window === "undefined") {
     return null;
   }
 
   // Disable body scroll when sidebar is open
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (visible) {
       document.body.style.overflow = "hidden";
@@ -29,7 +32,7 @@ export default function Sidebar({
     }
   }, [visible]);
 
-  return ReactDOM.createPortal(
+  return ReactDOM?.createPortal(
     <>
       {/* Overlay */}
       {visible && (
@@ -56,15 +59,22 @@ export default function Sidebar({
         }}
       >
         {/* CONTENT */}
-        <div className="flex justify-between items-center p-3 shadow-sm">
-          <h2 className="text-lg font-normal">Sidebar</h2>
-          <button
-            onClick={onClose}
-            className="text-md font-bold text-gray-500 hover:text-gray-700 cursor-pointer p-2 py-1 rounded-sm hover:bg-gray-100"
-          >
-            ✕
-          </button>
-        </div>
+        {headerTemplate ? (
+          headerTemplate
+        ) : (
+          <>
+            <div className="flex justify-between items-center p-3 shadow-sm">
+              <h2 className="text-lg font-normal">Sidebar</h2>
+              <button
+                onClick={onClose}
+                className="text-md font-bold text-gray-500 hover:text-gray-700 cursor-pointer p-2 py-1 rounded-sm hover:bg-gray-100"
+              >
+                ✕
+              </button>
+            </div>
+          </>
+        )}
+
         <div className="h-full overflow-y-auto p-4">{children}</div>
       </div>
 

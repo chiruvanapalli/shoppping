@@ -1,9 +1,11 @@
 import React from "react";
-import BreadCrumb from "./BreadCrumb";
-import useDynamicBreadcrumb from "./useDynamicBreadcrumb";
+import useDynamicBreadcrumb from "./common/useDynamicBreadcrumb";
+import BreadCrumb from "./common/BreadCrumb";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const crumbs = useDynamicBreadcrumb();
+  const navigate = useNavigate();
   const cartItems = [
     { name: "Chicken Biryani", price: 259, qty: 1 },
     { name: "Paneer Tikka", price: 199, qty: 1 },
@@ -81,7 +83,10 @@ const Cart = () => {
               </div>
             </div>
 
-            <button className="mt-6 w-full bg-orange-600 text-white py-3 rounded-full font-semibold hover:bg-orange-700 transition cursor-pointer">
+            <button
+              onClick={() => navigate("/checkout")}
+              className="mt-6 w-full bg-orange-600 text-white py-3 rounded-full font-semibold hover:bg-orange-700 transition cursor-pointer"
+            >
               Proceed to Checkout
             </button>
           </div>

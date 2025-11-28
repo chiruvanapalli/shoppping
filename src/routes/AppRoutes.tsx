@@ -7,11 +7,14 @@ import About from "../components/About";
 import { ProtectedRoute } from "./ProtectedRoute";
 import ProductDetails from "../components/ProductDetails";
 import Products from "../components/Products";
-import Cart from "../components/common/Cart";
-import AddressPage from "../components/Address";
 import OrderSuccess from "../components/OrderSuccess";
-import OrdersPage from "../components/MyOrders";
+import Checkout from "../components/Checkout";
+import Cart from "../components/Cart";
 import ProfilePage from "../components/Profile";
+import OrdersPage from "../components/OrdersPage";
+import Wishlist from "../components/Wishlist";
+import StripeWrapper from "../components/payments/StripWrapper";
+import PaymentPage from "../components/payments/Payment";
 
 const AppRoutes = () => {
   return (
@@ -25,10 +28,19 @@ const AppRoutes = () => {
           <Route path="/products" element={<Products />} />
           <Route path="/products/:productId" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/address" element={<AddressPage />} />
-          <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-status" element={<OrderSuccess />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route
+            path="/payment"
+            element={
+              <StripeWrapper>
+                <PaymentPage />
+              </StripeWrapper>
+            }
+          />
         </Route>
       </Route>
 

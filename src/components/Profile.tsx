@@ -1,146 +1,185 @@
 import React, { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { IoLogOutOutline } from "react-icons/io5";
+import { MdLocationOn, MdModeEdit, MdAdd } from "react-icons/md";
+import Modal from "./common/Modal"; // your existing global modal
 
 export default function ProfilePage() {
+  // Mock user
   const [user, setUser] = useState({
     name: "Hari Krishna",
     email: "hari@example.com",
     phone: "9876543210",
   });
 
-  const [editing, setEditing] = useState(false);
+  const [addresses, setAddresses] = useState([
+    {
+      id: 1,
+      label: "Home",
+      address: "Jubilee Hills, Hyderabad",
+    },
+    {
+      id: 2,
+      label: "Office",
+      address: "Mindspace, Hitech City",
+    },
+  ]);
 
-  const [form, setForm] = useState(user);
+  // Modals
+  const [editProfileOpen, setEditProfileOpen] = useState(false);
+  const [addAddressOpen, setAddAddressOpen] = useState(false);
 
-  const handleSave = () => {
-    setUser(form);
-    setEditing(false);
+  // Edit profile form
+  const [profileForm, setProfileForm] = useState(user);
+
+  const saveProfile = () => {
+    setUser(profileForm);
+    setEditProfileOpen(false);
+  };
+
+  // Add new address
+  const [newAddress, setNewAddress] = useState({ label: "", address: "" });
+
+  const saveAddress = () => {
+    if (!newAddress.label || !newAddress.address) return;
+    setAddresses([...addresses, { id: Date.now(), ...newAddress }]);
+    setNewAddress({ label: "", address: "" });
+    setAddAddressOpen(false);
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 min-h-screen">
-      {/* TITLE */}
-      <h1 className="text-3xl font-semibold mb-8">My Profile</h1>
+    <div className="max-w-5xl mx-auto p-6 pb-20">
+      <h1 className="text-3xl font-semibold mb-6">My Profile</h1>
 
-      {/* PROFILE HEADER */}
-      <div className="bg-white rounded-xl shadow p-6 flex items-center gap-5">
-        <FaUserCircle className="text-gray-300" size={90} />
-
-        <div className="flex-1">
-          {!editing ? (
-            <>
-              <h2 className="text-2xl font-semibold">{user.name}</h2>
-              <p className="text-gray-600 mt-1">{user.email}</p>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* PROFILE CARD */}
+        <div className="bg-white rounded-xl shadow p-6 space-y-4">
+          <div className="flex items-center gap-4">
+            <FaUserCircle size={70} className="text-gray-300" />
+            <div>
+              <h2 className="text-xl font-semibold">{user.name}</h2>
+              <p className="text-gray-600">{user.email}</p>
               <p className="text-gray-600">{user.phone}</p>
+            </div>
+          </div>
 
-              <button
-                onClick={() => setEditing(true)}
-                className="mt-4 px-5 py-2 rounded-full bg-orange-600 text-white font-semibold hover:bg-orange-700"
+          <button
+            className="flex items-center gap-2 border border-orange-600 text-orange-600 px-4 py-2 rounded-full hover:bg-orange-50 transition"
+            onClick={() => setEditProfileOpen(true)}
+          >
+            <MdModeEdit /> Edit Profile
+          </button>
+        </div>
+
+        {/* ADDRESSES CARD */}
+        <div className="col-span-2 bg-white rounded-xl shadow p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-semibold">Saved Addresses</h3>
+            <button
+              onClick={() => setAddAddressOpen(true)}
+              className="flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-full hover:bg-orange-700 transition"
+            >
+              <MdAdd /> Add Address
+            </button>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            {addresses.map((addr) => (
+              <div
+                key={addr.id}
+                className="border border-gray-300 rounded-lg p-4 shadow-sm hover:shadow-md transition cursor-pointer"
               >
-                Edit Profile
-              </button>
-            </>
-          ) : (
-            <>
-              {/* Edit Mode */}
-              <div className="space-y-3">
-                <input
-                  type="text"
-                  value={form.name}
-                  placeholder="Full Name"
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full border px-4 py-2 rounded-md"
-                />
+                <div className="flex items-center gap-2 mb-1">
+                  <MdLocationOn className="text-orange-600" />
+                  <span className="font-semibold">{addr.label}</span>
+                </div>
 
-                <input
-                  type="email"
-                  value={form.email}
-                  placeholder="Email"
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="w-full border px-4 py-2 rounded-md"
-                />
-
-                <input
-                  type="text"
-                  value={form.phone}
-                  placeholder="Phone Number"
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  className="w-full border px-4 py-2 rounded-md"
-                />
+                <p className="text-gray-600 text-sm">{addr.address}</p>
               </div>
-
-              <div className="flex gap-3 mt-4">
-                <button
-                  className="px-5 py-2 bg-orange-600 text-white rounded-full font-semibold hover:bg-orange-700"
-                  onClick={handleSave}
-                >
-                  Save
-                </button>
-                <button
-                  className="px-5 py-2 border rounded-full font-semibold"
-                  onClick={() => setEditing(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </>
-          )}
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* SECTIONS */}
-      <div className="mt-10 space-y-6">
-        {/* MANAGE ADDRESSES */}
-        <div className="bg-white rounded-xl shadow p-6">
-          <h3 className="text-xl font-semibold mb-4">My Addresses</h3>
-          <p className="text-gray-600 mb-3">
-            View and manage your saved addresses.
-          </p>
+      {/* EDIT PROFILE MODAL */}
+      <Modal
+        visible={editProfileOpen}
+        onHide={() => setEditProfileOpen(false)}
+        title="Edit Profile"
+      >
+        <div className="space-y-4">
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="w-full border px-4 py-2 rounded-md"
+            value={profileForm.name}
+            onChange={(e) =>
+              setProfileForm({ ...profileForm, name: e.target.value })
+            }
+          />
 
-          <button className="px-4 py-2 border rounded-full hover:bg-gray-50">
-            Manage Addresses
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full border px-4 py-2 rounded-md"
+            value={profileForm.email}
+            onChange={(e) =>
+              setProfileForm({ ...profileForm, email: e.target.value })
+            }
+          />
+
+          <input
+            type="text"
+            placeholder="Phone Number"
+            className="w-full border px-4 py-2 rounded-md"
+            value={profileForm.phone}
+            onChange={(e) =>
+              setProfileForm({ ...profileForm, phone: e.target.value })
+            }
+          />
+
+          <button
+            onClick={saveProfile}
+            className="w-full bg-orange-600 text-white py-2 rounded-md hover:bg-orange-700 transition"
+          >
+            Save
           </button>
         </div>
+      </Modal>
 
-        {/* PAYMENT METHODS */}
-        <div className="bg-white rounded-xl shadow p-6">
-          <h3 className="text-xl font-semibold mb-4">Payment Methods</h3>
-          <p className="text-gray-600 mb-3">
-            Saved UPI, cards, and payment preferences.
-          </p>
+      {/* ADD ADDRESS MODAL */}
+      <Modal
+        visible={addAddressOpen}
+        onHide={() => setAddAddressOpen(false)}
+        title="Add New Address"
+      >
+        <div className="space-y-4">
+          <input
+            type="text"
+            placeholder="Home / Office / Other"
+            className="w-full border px-4 py-2 rounded-md"
+            value={newAddress.label}
+            onChange={(e) =>
+              setNewAddress({ ...newAddress, label: e.target.value })
+            }
+          />
 
-          <button className="px-4 py-2 border rounded-full hover:bg-gray-50">
-            Manage Payments
+          <textarea
+            placeholder="Full Address"
+            className="w-full border px-4 py-2 rounded-md h-24"
+            value={newAddress.address}
+            onChange={(e) =>
+              setNewAddress({ ...newAddress, address: e.target.value })
+            }
+          ></textarea>
+
+          <button
+            onClick={saveAddress}
+            className="w-full bg-orange-600 text-white py-2 rounded-md hover:bg-orange-700 transition"
+          >
+            Save Address
           </button>
         </div>
-
-        {/* SETTINGS */}
-        <div className="bg-white rounded-xl shadow p-6">
-          <h3 className="text-xl font-semibold mb-4">Account Settings</h3>
-
-          <ul className="space-y-3 text-gray-700">
-            <li className="cursor-pointer hover:text-orange-600">
-              Change Password
-            </li>
-            <li className="cursor-pointer hover:text-orange-600">
-              Notifications
-            </li>
-            <li className="cursor-pointer hover:text-orange-600">
-              Privacy Settings
-            </li>
-          </ul>
-        </div>
-
-        {/* LOGOUT */}
-        <div className="bg-white rounded-xl shadow p-6 flex items-center justify-between">
-          <p className="text-lg font-medium">Logout</p>
-
-          <button className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600">
-            <IoLogOutOutline /> Logout
-          </button>
-        </div>
-      </div>
+      </Modal>
     </div>
   );
 }

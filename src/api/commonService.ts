@@ -11,4 +11,5 @@ export const commonService = {
     api.post("/auth/login", { email, password }),
   register: (userDetails: any) => api.post("/auth/register", userDetails),
   popularProducts: () => api.get("/popular-products"),
+  createOrder: (orderData: any) => api.post("/orders/create", orderData),
 };

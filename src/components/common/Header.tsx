@@ -1,15 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  FiShoppingCart,
-  FiUser,
-  FiChevronDown,
-  FiLogOut,
-} from "react-icons/fi";
+import { FiUser } from "react-icons/fi";
 import LOGO from "../../assets/images/png/brand-logo.png";
 import DeliverySearchBar from "../DeliverySearchBar";
 import { useNavigate } from "react-router-dom";
 import { VscListSelection } from "react-icons/vsc";
 import Sidebar from "./Sidebar";
+import UserInfo from "../UserInfo";
+
+const userData = {
+  name: "Hari Krishna",
+  email: "hari@example.com",
+  phone: "9876543210",
+  addresses: [
+    { id: 1, label: "Home", full: "Jubilee Hills, Hyderabad" },
+    { id: 2, label: "Office", full: "Mindspace, Hitech City" },
+  ],
+};
 
 const Header = () => {
   const navigate = useNavigate();
@@ -43,16 +49,18 @@ const Header = () => {
           className="text-center flex items-center"
           style={{ height: "70px" }}
         >
-          <div
-            onClick={() => setSidebarOpen(true)}
-            className="
+          {token && (
+            <div
+              onClick={() => setSidebarOpen(true)}
+              className="
     p-3 rounded-full cursor-pointer 
     transition-all duration-200
     hover:bg-gray-100 hover:scale-105
   "
-          >
-            <VscListSelection size={24} />
-          </div>
+            >
+              <VscListSelection size={24} />
+            </div>
+          )}
 
           <img src={LOGO} className="max-h-full" />
           <div className="font-extrabold text-4xl bg-gradient-to-r from-[#FFA726] to-[#EF5350] bg-clip-text text-transparent">
@@ -63,7 +71,10 @@ const Header = () => {
         <DeliverySearchBar />
 
         {/* RIGHT */}
-        <div className="flex items-center gap-4">
+        <div
+          className="flex items-center gap-4 cursor-pointer"
+          onClick={() => navigate("/cart")}
+        >
           {/* Cart Button */}
           {/* <button className="cursor-pointer group relative w-10 h-10 flex items-center justify-center rounded-full border border-gray-500 bg-white transition-all duration-200 hover:bg-orange-600 hover:border-orange-600">
             <FiShoppingCart
@@ -74,9 +85,21 @@ const Header = () => {
               02
             </span>
           </button> */}
-          2 items | ₹498
+          2 items |{" "}
+          <span className="font-semibold text-gray-900 text-lg">₹498.00</span>
+          {!token && (
+            <button
+              onClick={() => navigate("/login")}
+              className="cursor-pointer group flex items-center gap-2 border hover:border-orange-700 border-gray-500 px-4 py-2 rounded-full bg-white text-gray-700 transition-all duration-200 hover:bg-orange-600 hover:text-orange-600 hover:text-white"
+            >
+              <FiUser className="text-gray-700 group-hover:text-white" />
+              <span className="text-sm font-medium group-hover:text-white">
+                Log In
+              </span>
+            </button>
+          )}
           {/* 🔥 CONDITIONAL: LOGIN vs PROFILE */}
-          {!token ? (
+          {/* {!token ? (
             // LOGIN BUTTON
             <button
               onClick={() => navigate("/login")}
@@ -88,7 +111,6 @@ const Header = () => {
               </span>
             </button>
           ) : (
-            // PROFILE DROPDOWN
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setOpen(!open)}
@@ -105,7 +127,6 @@ const Header = () => {
                 />
               </button>
 
-              {/* DROPDOWN MENU */}
               {open && (
                 <div className="absolute right-0 mt-[2px] w-40 bg-white shadow-lg rounded-lg border border-gray-200 animate-fadeIn">
                   <button
@@ -124,7 +145,7 @@ const Header = () => {
                 </div>
               )}
             </div>
-          )}
+          )} */}
         </div>
       </div>
       <Sidebar
@@ -132,8 +153,22 @@ const Header = () => {
         position="left"
         width="400px"
         onClose={() => setSidebarOpen(false)}
+        headerTemplate={
+          <div className="flex justify-end relative right-2 top-2">
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="text-md font-bold text-gray-500 hover:text-gray-700 cursor-pointer p-2 py-1 rounded-sm hover:bg-gray-100"
+            >
+              ✕
+            </button>
+          </div>
+        }
       >
-        User Details go here
+        <UserInfo
+          user={userData}
+          onLogout={handleLogout}
+          closeSidebar={setSidebarOpen}
+        />
       </Sidebar>
     </header>
   );

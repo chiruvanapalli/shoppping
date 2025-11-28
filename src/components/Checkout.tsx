@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+import { IoIosCheckmark } from "react-icons/io";
+import Modal from "./common/Modal";
+import { commonService } from "../api/commonService";
+// import { useNavigate } from "react-router-dom";
 
-export default function AddressPage() {
+export default function Checkout() {
+  // const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [addresses, setAddresses] = useState([
     {
       id: 1,
@@ -24,15 +30,70 @@ export default function AddressPage() {
     phone: "",
   });
 
-  const [isModalOpen, setModalOpen] = useState(false);
-
   const handleAddAddress = () => {
     if (!newAddress.type || !newAddress.address || !newAddress.phone) return;
 
     setAddresses([...addresses, { id: Date.now(), ...newAddress }]);
 
     setNewAddress({ type: "", address: "", phone: "" });
-    setModalOpen(false);
+    setIsModalOpen(false);
+  };
+
+  const handleCheckout = async () => {
+    const activeAddress = addresses.find((addr) => addr.id === selected);
+    const shippingAddress = activeAddress
+      ? {
+          line1: activeAddress.address,
+          city: "Hyderabad",
+          state: "TS",
+          postalCode: "500033",
+          country: "IN",
+          phone: activeAddress.phone,
+          label: activeAddress.type,
+        }
+      : {
+          line1: "123 Test St",
+          city: "Testville",
+          state: "CA",
+          postalCode: "90210",
+          country: "US",
+        };
+
+    try {
+      const response = await commonService.createOrder({
+        currency: "usd",
+        successPath: "/order-status",
+        cancelPath: "/checkout-cancel",
+        items: [
+          {
+            productId: "sku-123",
+            name: "Test Item",
+            price: 19.99,
+            quantity: 1,
+          },
+          {
+            productId: "sku-987",
+            name: "Static Sample Add-on",
+            price: 9.99,
+            quantity: 2,
+          },
+        ],
+        shippingAddress,
+      });
+
+      const sessionUrl =
+        response?.data?.sessionUrl ||
+        response?.data?.url ||
+        response?.data?.checkoutUrl;
+
+      if (sessionUrl) {
+        window.location.href = sessionUrl;
+      } else {
+        console.error("Checkout response missing redirect URL", response?.data);
+      }
+    } catch (error) {
+      console.error("Checkout failed:", error);
+    }
   };
 
   return (
@@ -47,7 +108,7 @@ export default function AddressPage() {
             <h2 className="text-xl font-semibold">Saved Addresses</h2>
             <div
               className="border border-dashed border-gray-400 rounded-full p-2 px-4 text-center cursor-pointer hover:bg-gray-50"
-              onClick={() => setModalOpen(true)}
+              onClick={() => setIsModalOpen(true)}
             >
               <p className="text-md font-semibold text-gray-600">
                 + Add New Address
@@ -67,13 +128,17 @@ export default function AddressPage() {
                 onClick={() => setSelected(item.id)}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="px-3 py-1 bg-gray-100 rounded-md text-gray-700 text-sm">
+                  <span
+                    className={`py-1 ${
+                      selected === item.id
+                        ? "font-semibold"
+                        : "bg-gray-100 px-3"
+                    } rounded-md text-gray-900 text-sm`}
+                  >
                     {item.type}
                   </span>
                   {selected === item.id && (
-                    <span className="text-orange-600 text-sm font-semibold">
-                      Selected
-                    </span>
+                    <IoIosCheckmark size={30} color="#EA580C" />
                   )}
                 </div>
 
@@ -87,7 +152,7 @@ export default function AddressPage() {
         {/* RIGHT SIDE — ORDER SUMMARY */}
         <div>
           <h2 className="text-xl font-semibold mb-8">Order Summary</h2>
-          <div className="bg-white border shadow rounded-xl p-6 h-fit sticky top-24">
+          <div className="bg-white border border-gray-300 shadow rounded-xl p-6 h-fit sticky top-24">
             <div className="space-y-3 text-gray-700">
               <div className="flex justify-between">
                 <span>Item Total</span>
@@ -106,7 +171,8 @@ export default function AddressPage() {
             </div>
 
             <button
-              className={`mt-6 w-full py-3 rounded-full text-white font-semibold transition ${
+              onClick={handleCheckout}
+              className={`mt-6 w-full py-3 rounded-full text-white font-semibold cursor-pointer transition ${
                 selected
                   ? "bg-orange-600 hover:bg-orange-700"
                   : "bg-gray-400 cursor-not-allowed"
@@ -120,68 +186,62 @@ export default function AddressPage() {
       </div>
 
       {/* ADD ADDRESS MODAL */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="bg-white w-full max-w-md rounded-xl p-6 shadow-xl animate-slide-up">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Add New Address</h2>
+      {
+        <Modal
+          size="lg"
+          visible={isModalOpen}
+          onHide={() => setIsModalOpen(false)}
+          title="Add New Address"
+          footer={
+            <div className="flex justify-end gap-3">
               <button
-                onClick={() => setModalOpen(false)}
-                className="text-2xl font-bold text-gray-500 hover:text-gray-700"
-              >
-                &times;
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              <input
-                type="text"
-                placeholder="Address Type (Home / Office)"
-                className="w-full border px-4 py-2 rounded-md"
-                value={newAddress.type}
-                onChange={(e) =>
-                  setNewAddress({ ...newAddress, type: e.target.value })
-                }
-              />
-
-              <textarea
-                placeholder="Full Address"
-                className="w-full border px-4 py-2 rounded-md h-24"
-                value={newAddress.address}
-                onChange={(e) =>
-                  setNewAddress({ ...newAddress, address: e.target.value })
-                }
-              ></textarea>
-
-              <input
-                type="text"
-                placeholder="Phone Number"
-                className="w-full border px-4 py-2 rounded-md"
-                value={newAddress.phone}
-                onChange={(e) =>
-                  setNewAddress({ ...newAddress, phone: e.target.value })
-                }
-              />
-            </div>
-
-            <div className="flex justify-end gap-3 mt-6">
-              <button
-                className="px-4 py-2 text-gray-600 hover:text-gray-800"
-                onClick={() => setModalOpen(false)}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded-sm cursor-pointer"
+                onClick={() => setIsModalOpen(false)}
               >
                 Cancel
               </button>
 
               <button
-                className="px-6 py-2 bg-orange-600 text-white rounded-full hover:bg-orange-700"
+                className="px-6 py-2 bg-orange-600 text-white rounded-sm cursor-pointer hover:bg-orange-700"
                 onClick={handleAddAddress}
               >
                 Save Address
               </button>
             </div>
+          }
+        >
+          <div className="space-y-4">
+            <input
+              type="text"
+              placeholder="Address Type (Home / Office)"
+              className="w-full border border-gray-300 px-4 py-2 rounded-md"
+              value={newAddress.type}
+              onChange={(e) =>
+                setNewAddress({ ...newAddress, type: e.target.value })
+              }
+            />
+
+            <textarea
+              placeholder="Full Address"
+              className="w-full border border-gray-300 px-4 py-2 rounded-md h-24"
+              value={newAddress.address}
+              onChange={(e) =>
+                setNewAddress({ ...newAddress, address: e.target.value })
+              }
+            ></textarea>
+
+            <input
+              type="text"
+              placeholder="Phone Number"
+              className="w-full border border-gray-300 px-4 py-2 rounded-md"
+              value={newAddress.phone}
+              onChange={(e) =>
+                setNewAddress({ ...newAddress, phone: e.target.value })
+              }
+            />
           </div>
-        </div>
-      )}
+        </Modal>
+      }
 
       {/* Animation */}
       <style>{`
